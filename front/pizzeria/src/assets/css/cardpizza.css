@@ -1,0 +1,20 @@
+.fotoPizza{
+    width: auto;
+    height: 200px;
+    border-radius: 3%;
+}
+.precioPizza{
+    font-size: 28px;
+    font-weight: bold;
+    color: rgb(78, 78, 78);
+}
+.iconoPizza{
+    height: 24px;
+    width: 24px;
+}
+.ingredientesPizza{
+    font-size: 18px;
+}
+.descripcionPizza{
+    font-size: 13px;
+}
