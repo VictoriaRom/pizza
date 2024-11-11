@@ -1,5 +1,5 @@
 import React from "react";
-import "../assets/css/footer.css";
+import '../assets/css/footer.css';
 
 const Footer = () =>(
     <div className="bg-dark text-light d-flex justify-content-center align-items-center footer">

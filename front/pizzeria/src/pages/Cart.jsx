@@ -1,19 +1,25 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useCart } from "../context/CartContext";
 import { UserContext } from "../context/UserContext";
+import axios from "axios";
+import { Link } from "react-router-dom";
 
 const Cart = () => {
     const { cartItems, aumentarCantidad, disminuirCantidad, getTotal, clearCart } = useCart();
     const { token } = useContext(UserContext);
+    const [message, setMessage] = useState("");
 
     const totalLocal = getTotal();
 
-    const handlePagar = () => {
-        if(token && cartItems.length > 0){
-            alert("Pago exitoso! Gracias por tu compra");
+    const handlePagar = async () => {
+        try{
+            await axios.post('http://localhost:5000/api/checkouts', { cartItems }, { headers: {Authorization: `Bearer ${token}`}});
+            setMessage("Compra realizda con exito!!");
             clearCart();
-        } else if (!token){
-            alert("Inicia sesión para realizar el pago!");
+        }
+        catch (error){
+            setMessage("Error al realizar la compra!");
+            alert(message);
         }
     };
 
@@ -44,7 +50,7 @@ const Cart = () => {
                             </div>
                         </div>
                     ))) : (
-                        <p>No hay pizzas en el carro</p>
+                        <p>No hay pizzas en el carrito</p>
                     )
                 }
             </div>
@@ -54,8 +60,20 @@ const Cart = () => {
                 <button className="btn btn-success" onClick={handlePagar} disabled={!token || cartItems.length === 0}>
                     <i className="bi bi-credit-card-fill"></i>&nbsp;Pagar
                 </button>
-                {!token && <p className="text-danger mt-2">Debes iniciar sesión para hacer el pago!!</p>}
-                {cartItems.length === 0 && <p className="text-danger mt-2">Carrito vacío, agregá tu pizza favorita!</p>}
+                {!token && 
+                    <div class="alert alert-danger" role="alert">
+                        Debés iniciar sesión para hacer el pago!!
+                    </div>}
+                {cartItems.length === 0 && 
+                    <div class="alert alert-danger" role="alert">
+                        Carrito vacío, tocá <Link to={"/"}> acá</Link> para agregar pizzas al carrito de compras!
+                    </div>
+                }
+                {message && 
+                    <div class="alert alert-danger" role="alert">
+                        {message}
+                    </div>
+                }
             </div>
         </div>        
     );
